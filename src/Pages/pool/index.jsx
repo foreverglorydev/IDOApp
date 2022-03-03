@@ -17,9 +17,11 @@ import registerSmallIcon from "../../assets/image/Presales Page/SVG/Asset 856.sv
 import { useLocation, useParams } from "react-router";
 import styled from "styled-components";
 import Badges from "../../components/badges";
-import { generateTimeRemainingString } from "../../helpers/helpers";
+import { fromBaseUnit, generateTimeRemainingString, toBaseUnit } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+
+import {getContract} from './../../helpers/helpers'
 
 const MainContainer = styled.div`
   padding: 100px;
@@ -85,20 +87,43 @@ export class PoolPage extends React.Component {
       date: new Date(),
       interval: null,
       timeRemaining: "",
+      isLoading: 0,
+      buysucceed: false,
+      buyfailed: false,
+
+      hardCap: 0,
+      status: '',
+      amount: 1,
+      inavalidAmount: false,            
+      phase: "0",
+      currentsupply: 0
+
+
     };
   }
+
+  
 
   componentWillUnmount() {
     clearInterval(this.state.interval);
   }
 
-  componentDidMount() {
+ 
+
+ 
+
+  async componentDidMount () {
+
+    
+    await this.getContractdata()
+
     if (this.props.location.state) {
       this.setState({
         timeRemaining: generateTimeRemainingString(
           this.props.location.state.idoData.startTimestamp
         ),
       });
+      
       this.state.interval = setInterval(() => {
         this.setState({
           timeRemaining: generateTimeRemainingString(
@@ -106,12 +131,120 @@ export class PoolPage extends React.Component {
           ),
         });
       }, 1000);
+
+      this.state.interval = setInterval(() => {
+        this.setState({
+          timeRemaining: generateTimeRemainingString(
+            this.props.location.state.idoData.startTimestamp
+          ),
+        });
+      }, 1000);
+      
     }
   }
 
   checkAmount = (e) => {
-    console.log(e.target.value);
+
+    let value = e.target.value
+    console.log(value);
+    if(value > 1) {
+      value = 1
+    }
+
+    this.setState({amount: value})
+
+    if(value < 0.01) {
+      this.setState({inavalidAmount: true})
+    } else {
+      this.setState({inavalidAmount: false})
+    }
+
   };
+
+
+  buyToken = async()=> {
+
+    
+    this.setState({buysucceed:false})
+    this.setState({buyfailed:false})
+
+    let phase = this.state.phase
+    let amount = this.state.amount
+
+    amount = toBaseUnit(amount)
+    
+    
+
+    if(!this.state.inavalidAmount && phase !== "0") {
+
+      this.setState({isLoading: 1})
+      let contract = await getContract();
+      
+      
+    try { 
+      if(phase === "1" ) {
+                      
+        let result = await contract
+        .methods
+        .userDepositsWhitelist()
+        .send({ from: window.ethereum.selectedAddress,  value: amount })
+
+        
+      }
+
+      else if(phase === "2") {
+        let result = await contract
+        .methods
+        ._UserDepositPublicPhase()
+        .send({ from: window.ethereum.selectedAddress,  value: amount })
+
+        
+      }
+      this.setState({buysucceed: 1})
+    }
+
+    catch{
+      this.setState({buyfailed: 1})
+    }
+    finally {
+      this.setState({isLoading: 0})
+    }
+  }
+    
+    
+  }
+
+  getContractdata = async ()=> {
+    let contract = await getContract();
+                    
+    let hardCap = await contract
+    .methods
+    .returnHardCap()
+    .call();
+
+    this.setState({hardCap: fromBaseUnit(hardCap)})      
+    
+    
+    let phase = await contract
+      .methods
+      ._phase()
+      .call();
+                  
+    if(phase == "0"){
+      this.setState({status: 'Upcoming'})       
+    } else {
+      this.setState({status: 'Live'})
+    }
+    
+    this.setState({phase: phase})
+
+
+    let currentsupply = await contract
+      .methods
+      .GweiCollected()
+      .call();
+    this.setState({currentsupply: fromBaseUnit(currentsupply)})
+  }
 
   render() {
     if (!this.props.location.state) {
@@ -170,9 +303,9 @@ export class PoolPage extends React.Component {
                 </p>
               </div>
               <div className="flex">
-                <p className="text-15 text-white font-bold">Hard Cap:</p>
+                <p className="text-15 text-white font-bold">Hard Cap : </p>
                 <p className="text-15 text-white">
-                  {this.props.location.state.idoData.hardCap}
+                  {this.state.hardCap} BNB
                 </p>
               </div>
             </div>
@@ -292,6 +425,7 @@ export class PoolPage extends React.Component {
                   </div>
                 </div>
               </div>
+              {/**
               <div className="bg-black w-full h-100 px-30 py-20 rounded-xl">
                 <button className="flex w-full h-full text-15 text-white bg-gradient-to-r from-green3 to-green2 rounded-xl items-center justify-center gap-20">
                   connect Wallet
@@ -302,6 +436,7 @@ export class PoolPage extends React.Component {
                   />
                 </button>
               </div>
+               */}
               <div className="flex justify-end">
                 <p className="text-20 text-white opacity-50 border-b">
                   How to participate
@@ -327,13 +462,13 @@ export class PoolPage extends React.Component {
                 <div
                   className="bg-green1 h-10 rounded-full"
                   style={{
-                    width: `${this.props.location.state.idoData.totalProgress}%`,
+                    width: `${(this.state.currentsupply /this.state.hardCap)*100}%`,
                   }}
                 ></div>
               </div>
               <div className="flex justify-between items-end mb-10">
                 <p className="text-white text-12 opacity-50">0XXX</p>
-                <p className="text-white text-12 opacity-50">{`${this.props.location.state.idoData.supply} / ${this.props.location.state.idoData.totalSupply}`}</p>
+                <p className="text-white text-12 opacity-50">{`${this.state.currentsupply} / ${this.state.hardCap} BNB`}</p>
               </div>
               <div className="flex mb-10">
                 <img
@@ -395,21 +530,47 @@ export class PoolPage extends React.Component {
                   }
                   className="bg-transparent text-white w-full"
                   onChange={(e) => this.checkAmount(e)}
+                  value= {this.state.amount}
                 />
                 <p className="text-15 text-green1">MAX</p>
               </div>
+
+              { this.state.inavalidAmount && <div style={{color: "red"}}> invalid amount</div>}
+              
+              { this.state.isLoading === 0 && 
               <div className="border-2 border-white py-5 h-fit rounded-xl flex w-1/4 px-10 mb-25 justify-between items-center">
                 <img
                   src={checkSmallIcon}
                   alt="checksmallicon"
                   className="w-15 h-15"
-                />
-                <button className="text-15 text-white ">Buy</button>
+                />               
+                <button className="text-15 text-white " onClick={()=> this.buyToken()}>Buy</button>                
               </div>
+              }
+
+              {this.state.isLoading===1 &&
+              
+                <div className="border-2 border-white py-5 h-fit rounded-xl flex w-1/4 px-10 mb-25 justify-between items-center">
+                  <img
+                    src={checkSmallIcon}
+                    alt="checksmallicon"
+                    className="w-15 h-15"
+                  />
+                
+                  <button className="text-15 text-white " disabled>loading </button>
+                  
+                </div>
+              }
+
+              { this.state.buysucceed && <div className="text-15 text-green1 ">Buy has succeeded</div>}
+
+              { this.state.buyfailed && <div style={{color: "red"}}> Buy has Failed </div>}
+
               <div className="flex justify-between border-t border-b border-white border-opacity-20">
                 <p className="text-15 text-white">Status</p>
                 <p className="text-15 text-green1 ">
-                  {this.props.location.state.idoData.tradeInformation.status}
+                  {this.state.status}                  
+                  {/*this.props.location.state.idoData.tradeInformation.status*/}
                 </p>
               </div>
               <div className="flex justify-between border-b border-white border-opacity-20">
