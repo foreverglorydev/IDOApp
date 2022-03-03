@@ -23,8 +23,12 @@ const Header = () => {
         <div className="max-w-xl w-full px-30 hidden 2xl:flex justify-between items-center" role="group">
           <Link to="/"><span className="text-white text-17 hover:border-b hover:border-green2">POOLS</span></Link>
           <span className="text-white text-17 hover:border-b hover:border-green2">TOKEN CREATION</span>
+          <a href="https://ignite-defi.com/"> 
           <span className="text-white text-17 hover:border-b hover:border-green2">ABOUT</span>
-          <span className="text-white text-17 hover:border-b hover:border-green2">TOKEN LOCKER</span>
+          </a>
+          <a href="https://lock.sparklaunch.net">
+            <span className="text-white text-17 hover:border-b hover:border-green2">TOKEN LOCKER</span>
+          </a>
         </div>
         <div className="flex justify-between">
           <div className="h-50 bg-gradient-to-r from-green3 to-green2 hidden xl:flex

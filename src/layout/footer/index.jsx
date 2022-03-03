@@ -68,10 +68,16 @@ const Footer = () => {
         <InnerFlex>
           <div className="flex flex-col">
             <div className="flex justify-between flex-row my-20">
-              <div className="text-white text-16 mr-40">POOLS</div>
+              <a href="/">
+                <div className="text-white text-16 mr-40">POOLS</div>
+              </a>
               <div className="text-white text-16 mr-40">TOKEN CREATION</div>
+              <a href="https://ignite-defi.com/">
               <div className="text-white text-16 mr-40">ABOUT</div>
-              <div className="text-white text-16">TOKEN LOCKER</div>
+              </a>
+              <a href="https://lock.sparklaunch.net">
+                <div className="text-white text-16">TOKEN LOCKER</div>
+              </a>
             </div>
             <div className="flex flex-row my-20">
               <div className="w-full flex flex-col">

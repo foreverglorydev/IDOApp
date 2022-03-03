@@ -51,6 +51,7 @@ const HeaderMenu = () => {
                 )}
               </Menu.Item>
             </div>
+            <a href="https://ignite-defi.com/">            
             <div className="p-10 whitespace-nowrap">
               <Menu.Item>
                 {({ active }) => (
@@ -63,6 +64,8 @@ const HeaderMenu = () => {
                 )}
               </Menu.Item>
             </div>
+            </a>
+            <a href="https://lock.sparklaunch.net">
             <div className="p-10 whitespace-nowrap">
               <Menu.Item>
                 {({ active }) => (
@@ -75,6 +78,7 @@ const HeaderMenu = () => {
                 )}
               </Menu.Item>
             </div>
+            </a>
             <div className="block xl:hidden p-10 whitespace-nowrap">
               <Menu.Item>
                 {({ active }) => (
