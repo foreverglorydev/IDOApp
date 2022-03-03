@@ -1,0 +1,41 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d71cb8d9.chunk.css",
+    "main.js": "/static/js/main.e39b949c.chunk.js",
+    "main.js.map": "/static/js/main.e39b949c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.aae41c9c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.aae41c9c.js.map",
+    "static/js/2.8a8754e3.chunk.js": "/static/js/2.8a8754e3.chunk.js",
+    "static/js/2.8a8754e3.chunk.js.map": "/static/js/2.8a8754e3.chunk.js.map",
+    "static/js/3.b692e021.chunk.js": "/static/js/3.b692e021.chunk.js",
+    "static/js/3.b692e021.chunk.js.map": "/static/js/3.b692e021.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.d71cb8d9.chunk.css.map": "/static/css/main.d71cb8d9.chunk.css.map",
+    "static/js/2.8a8754e3.chunk.js.LICENSE.txt": "/static/js/2.8a8754e3.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/1Background.cc36e863.png",
+    "static/media/Asset 410.67ec8d52.svg": "/static/media/Asset 410.67ec8d52.svg",
+    "static/media/Asset 424.ee43bea7.svg": "/static/media/Asset 424.ee43bea7.svg",
+    "static/media/Asset 426.62f1b657.svg": "/static/media/Asset 426.62f1b657.svg",
+    "static/media/Asset 429.94b2b6b0.svg": "/static/media/Asset 429.94b2b6b0.svg",
+    "static/media/Asset 455.ba2bd329.svg": "/static/media/Asset 455.ba2bd329.svg",
+    "static/media/Asset 456.1c9a3a10.svg": "/static/media/Asset 456.1c9a3a10.svg",
+    "static/media/Asset 457.2a12b937.svg": "/static/media/Asset 457.2a12b937.svg",
+    "static/media/Asset 458.0798ec58.svg": "/static/media/Asset 458.0798ec58.svg",
+    "static/media/Asset 705.194ab6dc.svg": "/static/media/Asset 705.194ab6dc.svg",
+    "static/media/Asset 826.f119d4b1.svg": "/static/media/Asset 826.f119d4b1.svg",
+    "static/media/Asset 854.61ab2914.svg": "/static/media/Asset 854.61ab2914.svg",
+    "static/media/Asset 855.c0b0f9e9.svg": "/static/media/Asset 855.c0b0f9e9.svg",
+    "static/media/Asset 856.792a9ef6.svg": "/static/media/Asset 856.792a9ef6.svg",
+    "static/media/Asset 861.61d39397.svg": "/static/media/Asset 861.61d39397.svg",
+    "static/media/Asset 871.56ddbd4d.svg": "/static/media/Asset 871.56ddbd4d.svg",
+    "static/media/Asset 875.4317faf0.svg": "/static/media/Asset 875.4317faf0.svg",
+    "static/media/Asset 876.61bf7941.svg": "/static/media/Asset 876.61bf7941.svg",
+    "static/media/WIbhqs.tif.e96e9bdf.svg": "/static/media/WIbhqs.tif.e96e9bdf.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.aae41c9c.js",
+    "static/js/2.8a8754e3.chunk.js",
+    "static/css/main.d71cb8d9.chunk.css",
+    "static/js/main.e39b949c.chunk.js"
+  ]
+}
