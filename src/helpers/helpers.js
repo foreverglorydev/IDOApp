@@ -44,7 +44,7 @@ export const getContract = async () => {
         case ETH_BSC:
             request = await Axios.get("/Contract.json");
             contract = request.data;            
-            return new web3.eth.Contract(contract, "0x6f3a3c5e73D904e0304332b9e0B9234447f13ED5")
+            return new web3.eth.Contract(contract, "0xac7Cc39c28038041Ba5290f4dD5d63e9B7A9a08f")
                         
         default:
             return []
