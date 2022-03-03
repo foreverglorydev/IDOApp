@@ -575,7 +575,7 @@ export class PoolPage extends React.Component {
                   onChange={(e) => this.checkAmount(e)}
                   value= {this.state.amount}
                 />
-                <p className="text-15 text-green1">MAX</p>
+                <button className="text-15 text-green1" onClick={()=> this.setState({amount: 1})}>MAX</button>
               </div>
 
               { this.state.inavalidAmount && <div style={{color: "red"}}> invalid amount</div>}

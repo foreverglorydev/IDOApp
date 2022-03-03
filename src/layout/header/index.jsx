@@ -17,7 +17,9 @@ const Header = () => {
   return (
     <div className="w-full h-150 bg-black flex justify-center" >
       <HeaderFlex className="container flex items-center justify-between">
-        <img src={Logo} alt="logo" className="h-50 md:h-95" />
+        <a href="/">
+          <img src={Logo} alt="logo" className="h-50 md:h-95" />
+        </a>
         <div className="max-w-xl w-full px-30 hidden 2xl:flex justify-between items-center" role="group">
           <Link to="/"><span className="text-white text-17 hover:border-b hover:border-green2">POOLS</span></Link>
           <span className="text-white text-17 hover:border-b hover:border-green2">TOKEN CREATION</span>
