@@ -236,7 +236,9 @@ export class PoolPage extends React.Component {
       this.setState({status: 'Live'})
     }
     
+    //phase
     this.setState({phase: phase})
+    //this.setState({phase: "4"})
 
 
     let currentsupply = await contract
@@ -244,6 +246,46 @@ export class PoolPage extends React.Component {
       .GweiCollected()
       .call();
     this.setState({currentsupply: fromBaseUnit(currentsupply)})
+  }
+
+  withdrawToken = async ()=> {
+    
+    console.log("withdraw");
+    let contract = await getContract();
+    this.setState({isLoading: 1})
+    try {
+
+      let result = await contract
+      .methods
+      .withdrawTokens()
+      .send({ from: window.ethereum.selectedAddress})
+      console.log(result);    
+    } 
+    catch {
+      
+    } finally {
+      this.setState({isLoading: 0})
+    }
+  }
+
+
+  withdrawBNB = async ()=> {
+    console.log("withdrawBNB");
+    let contract = await getContract();
+    this.setState({isLoading: 1})
+    try {
+
+      let result = await contract
+      .methods
+      .withdrawBaseToken()
+      .send({ from: window.ethereum.selectedAddress})
+      console.log(result);    
+    } 
+    catch {
+      
+    } finally {
+      this.setState({isLoading: 0})
+    }
   }
 
   render() {
@@ -514,6 +556,7 @@ export class PoolPage extends React.Component {
                 </p>
               </div>
             </div>
+            { (this.state.phase!= 3 && this.state.phase!= 4) &&
             <div className="w-full p-20 flex h-2/5 bg-gray-800 flex-col">
               <p className="text-white text-15 pb-15">
                 Amount:{" "}
@@ -537,7 +580,7 @@ export class PoolPage extends React.Component {
 
               { this.state.inavalidAmount && <div style={{color: "red"}}> invalid amount</div>}
               
-              { this.state.isLoading === 0 && 
+              { (this.state.isLoading === 0 && this.state.phase!=3 && this.state.phase!=4)  && 
               <div className="border-2 border-white py-5 h-fit rounded-xl flex w-1/4 px-10 mb-25 justify-between items-center">
                 <img
                   src={checkSmallIcon}
@@ -588,6 +631,43 @@ export class PoolPage extends React.Component {
                 <p className="text-15 text-white ">{`${this.props.location.state.idoData.tradeInformation.maxVal} ${this.props.location.state.idoData.tradeInformation.symbol}`}</p>
               </div>
             </div>
+            }
+
+            { ( this.state.phase == 3 && this.state.isLoading == 0) &&
+            <div style={{margin: "0 auto"}}>
+              <p className="text-15 text-white">Sale Succecs</p>
+              <div className="border-2 border-white py-5 h-fit rounded-xl flex  px-10 mb-25 justify-between items-center">
+                <img
+                  src={checkSmallIcon}
+                  alt="checksmallicon"
+                  className="w-15 h-15"
+                />               
+                <button className="text-15 text-white " onClick={()=> this.withdrawToken()}>withdraw Token</button>                
+              </div>
+            </div>
+            }
+            
+            { ( this.state.phase == 4 && this.state.isLoading == 0) &&
+             <div style={{margin: "0 auto"}}>
+             <p className="text-15 text-white">Sale Failed</p>
+              <div className="border-2 border-white py-5 h-fit rounded-xl flex px-10 m-10 justify-between items-center">
+                <img
+                  src={checkSmallIcon}
+                  alt="checksmallicon"
+                  className="w-15 h-15"
+                />               
+                <button className="text-15 text-white " onClick={()=> this.withdrawBNB()}>Withdraw BNB</button>                
+              </div>
+              </div>
+            }
+
+            {this.state.isLoading===1 &&
+              <div style={{margin: "0 auto"}}>             
+              <div className="border-2 border-white py-5 h-fit rounded-xl px-10 mb-25 justify-between items-center">                               
+                <button className="text-15 text-white " disabled>loading </button>                  
+              </div>
+              </div>
+            }                           
           </WalletCard>
         </FlexContainer>
       </MainContainer>
