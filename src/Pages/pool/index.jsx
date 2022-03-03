@@ -145,8 +145,7 @@ export class PoolPage extends React.Component {
 
   checkAmount = (e) => {
 
-    let value = e.target.value
-    console.log(value);
+    let value = e.target.value    
     if(value > 1) {
       value = 1
     }
@@ -230,7 +229,7 @@ export class PoolPage extends React.Component {
       ._phase()
       .call();
                   
-    if(phase == "0"){
+    if(phase === "0"){
       this.setState({status: 'Upcoming'})       
     } else {
       this.setState({status: 'Live'})
@@ -238,7 +237,7 @@ export class PoolPage extends React.Component {
     
     //phase
     this.setState({phase: phase})
-    //this.setState({phase: "4"})
+    //this.setState({phase: "1"})
 
 
     let currentsupply = await contract
@@ -250,7 +249,7 @@ export class PoolPage extends React.Component {
 
   withdrawToken = async ()=> {
     
-    console.log("withdraw");
+    
     let contract = await getContract();
     this.setState({isLoading: 1})
     try {
@@ -259,7 +258,7 @@ export class PoolPage extends React.Component {
       .methods
       .withdrawTokens()
       .send({ from: window.ethereum.selectedAddress})
-      console.log(result);    
+      
     } 
     catch {
       
@@ -270,7 +269,7 @@ export class PoolPage extends React.Component {
 
 
   withdrawBNB = async ()=> {
-    console.log("withdrawBNB");
+    
     let contract = await getContract();
     this.setState({isLoading: 1})
     try {
@@ -279,7 +278,7 @@ export class PoolPage extends React.Component {
       .methods
       .withdrawBaseToken()
       .send({ from: window.ethereum.selectedAddress})
-      console.log(result);    
+      
     } 
     catch {
       
@@ -556,7 +555,7 @@ export class PoolPage extends React.Component {
                 </p>
               </div>
             </div>
-            { (this.state.phase!= 3 && this.state.phase!= 4) &&
+            { (this.state.phase!== "3" && this.state.phase!== "4") &&
             <div className="w-full p-20 flex h-2/5 bg-gray-800 flex-col">
               <p className="text-white text-15 pb-15">
                 Amount:{" "}
@@ -580,7 +579,7 @@ export class PoolPage extends React.Component {
 
               { this.state.inavalidAmount && <div style={{color: "red"}}> invalid amount</div>}
               
-              { (this.state.isLoading === 0 && this.state.phase!=3 && this.state.phase!=4)  && 
+              { (this.state.isLoading === 0 && this.state.phase!=="3" && this.state.phase!=="4")  && 
               <div className="border-2 border-white py-5 h-fit rounded-xl flex w-1/4 px-10 mb-25 justify-between items-center">
                 <img
                   src={checkSmallIcon}
@@ -633,7 +632,7 @@ export class PoolPage extends React.Component {
             </div>
             }
 
-            { ( this.state.phase == 3 && this.state.isLoading == 0) &&
+            { ( this.state.phase === "3" && this.state.isLoading === 0) &&
             <div style={{margin: "0 auto"}}>
               <p className="text-15 text-white">Sale Succecs</p>
               <div className="border-2 border-white py-5 h-fit rounded-xl flex  px-10 mb-25 justify-between items-center">
@@ -647,7 +646,7 @@ export class PoolPage extends React.Component {
             </div>
             }
             
-            { ( this.state.phase == 4 && this.state.isLoading == 0) &&
+            { ( this.state.phase === "4" && this.state.isLoading === 0) &&
              <div style={{margin: "0 auto"}}>
              <p className="text-15 text-white">Sale Failed</p>
               <div className="border-2 border-white py-5 h-fit rounded-xl flex px-10 m-10 justify-between items-center">
