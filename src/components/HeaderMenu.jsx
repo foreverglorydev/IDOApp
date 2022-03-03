@@ -23,18 +23,22 @@ const HeaderMenu = () => {
         >
 
           <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <a href="/">
             <div className="p-10 whitespace-nowrap">
               <Menu.Item>
                 {({ active }) => (
                   <button
                     className={`${active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex rounded-md items-center w-full p-10 text-sm`}
-                  >
+                     
+                      >
+
                     POOLS
                   </button>
                 )}
               </Menu.Item>
             </div>
+            </a>
             <div className="p-10 whitespace-nowrap">
               <Menu.Item>
                 {({ active }) => (
