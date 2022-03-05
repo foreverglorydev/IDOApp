@@ -1,6 +1,6 @@
 /* eslint-disable react/no-direct-mutation-state */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useLayoutEffect } from "react";
+import React from "react";
 
 import BackGround from "../../assets/image/Homepage/1x/1Background.png";
 import ConnecttionItems from "../../components/connection";
@@ -18,8 +18,8 @@ import { useLocation, useParams } from "react-router";
 import styled from "styled-components";
 import Badges from "../../components/badges";
 import { fromBaseUnit, generateTimeRemainingString, toBaseUnit } from "../../helpers/helpers";
-import { useHistory } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+
+import { connect } from 'react-redux';
 
 import {getContract} from './../../helpers/helpers'
 import {IdoItems} from './../../data/IdoItems'
@@ -112,10 +112,9 @@ export class PoolPage extends React.Component {
   }
 
   async componentDidMount () {
-
-    
-    await this.getContractdata()
-
+    if(this.props.wallet) {
+      await this.getContractdata(this.props.wallet)
+    }    
     if (this.props.location.state) {
       this.setState({
         timeRemaining: generateTimeRemainingString(
@@ -140,6 +139,13 @@ export class PoolPage extends React.Component {
       }, 1000);
       
     }
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    // You don't have to do this check first, but it can help prevent an unneeded render
+    if(nextProps.wallet !== undefined) {            
+      await this.getContractdata(nextProps.wallet)
+    }            
   }
 
   checkAmount = (e) => {
@@ -176,7 +182,7 @@ export class PoolPage extends React.Component {
     if(!this.state.inavalidAmount && phase !== "0") {
 
       this.setState({isLoading: 1})
-      let contract = await getContract();
+      let contract = await getContract(this.props.wallet);
       
       
     try { 
@@ -185,7 +191,7 @@ export class PoolPage extends React.Component {
         let result = await contract
         .methods
         .userDepositsWhitelist()
-        .send({ from: window.ethereum.selectedAddress,  value: amount })
+        .send({ from: this.props.address,  value: amount })
 
         
       }
@@ -194,7 +200,7 @@ export class PoolPage extends React.Component {
         let result = await contract
         .methods
         ._UserDepositPublicPhase()
-        .send({ from: window.ethereum.selectedAddress,  value: amount })
+        .send({ from: this.props.address,  value: amount })
 
         
       }
@@ -212,8 +218,9 @@ export class PoolPage extends React.Component {
     
   }
 
-  getContractdata = async ()=> {
-    let contract = await getContract();
+  getContractdata = async (wallet)=> {
+    
+    let contract = await getContract(wallet);
                     
     let hardCap = await contract
     .methods
@@ -249,14 +256,14 @@ export class PoolPage extends React.Component {
   withdrawToken = async ()=> {
     
     
-    let contract = await getContract();
+    let contract = await getContract(this.props.wallet);
     this.setState({isLoading: 1})
     try {
 
       let result = await contract
       .methods
       .withdrawTokens()
-      .send({ from: window.ethereum.selectedAddress})
+      .send({ from: this.props.address})
       
     } 
     catch {
@@ -268,15 +275,15 @@ export class PoolPage extends React.Component {
 
 
   withdrawBNB = async ()=> {
-    
-    let contract = await getContract();
+       
+    let contract = await getContract(this.props.wallet);    
     this.setState({isLoading: 1})
     try {
 
       let result = await contract
       .methods
       .withdrawBaseToken()
-      .send({ from: window.ethereum.selectedAddress})
+      .send({ from: this.props.address})
       
     } 
     catch {
@@ -672,4 +679,12 @@ export class PoolPage extends React.Component {
     );
   }
 }
-export default PoolPage;
+
+const mapStateToProps = (state) => {
+  return {
+    wallet: state.wallet,
+    address: state.address
+  };
+}
+
+export default connect(mapStateToProps)(PoolPage);

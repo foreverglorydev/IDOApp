@@ -1,6 +1,6 @@
 import Axios from 'axios';
-import { getWeb3 } from "../web3provider";
 import Web3Utils from 'web3-utils';
+import Web3 from 'web3';
 
 export const generateTimeRemainingString = function (timestamp) {
 
@@ -30,8 +30,10 @@ export const ETH_GANACHE = 1337;
 export const ETH_BSC = 56;
 export const ETH_BSC_TESTNET = 97;
 
-export const getContract = async () => {
-    let web3 = await getWeb3();
+export const getContract = async (provider) => {    
+    let web3 = new Web3(provider);
+    window.w3 = web3
+    window.web3 = web3    
     let network = await web3.eth.getChainId();
     let request, contract;
 

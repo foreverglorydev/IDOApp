@@ -6,6 +6,7 @@ import WalletLink from 'walletlink'
 import { providers } from 'ethers'
 import { useCallback, useEffect, useReducer } from 'react'
 
+import {useDispatch} from 'react-redux'
 
 const supportedChains = [
   {
@@ -258,10 +259,35 @@ function ellipseAddress(address = '', width = 10) {
 }
 const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad'
 const providerOptions = {
+  /*
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
       infuraId: INFURA_ID, // required
+    },
+  },*/
+
+  'custom-WalletConnectProvider': {
+    display: {
+      name: 'WalletConnect',
+      description: 'Scan with WalletConnect to connect',
+      logo: 'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d'
+    },
+    package: WalletConnectProvider, // required
+    options: {
+    
+    },
+
+    connector: async (_, options) => {      
+      const provider = new _({
+        rpc: {
+          56: 'https://bsc-dataseed1.defibit.io/'
+        },
+        chainId: 56,
+        infuraId: undefined
+      })      
+      await provider.enable()
+      return provider
     },
   },
   'custom-walletlink': {
@@ -347,6 +373,8 @@ export const Web3Modals = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { provider, web3Provider, address, chainId } = state
 
+  const dispatcher = useDispatch();
+
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
     // using web3Modal to connect. Can be MetaMask or WalletConnect.
@@ -362,6 +390,7 @@ export const Web3Modals = () => {
 
     const network = await web3Provider.getNetwork()
 
+            
     dispatch({
       type: 'SET_WEB3_PROVIDER',
       provider,
@@ -369,7 +398,18 @@ export const Web3Modals = () => {
       address,
       chainId: network.chainId,
     })
-  }, [])
+
+    dispatcher({
+      type: 'SET_WALLET',
+      payload: provider
+    })
+
+    dispatcher({
+      type: 'SET_ADDRESS',
+      payload: address
+    })
+    
+  }, [dispatcher])
 
   const disconnect = useCallback(
     async function () {
